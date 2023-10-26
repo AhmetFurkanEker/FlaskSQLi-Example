@@ -1,6 +1,7 @@
 from flask import Flask, render_template, request, redirect, url_for, session
 import sqlite3
 import hashlib
+import bleach
 
 app = Flask(__name__)
 app.secret_key = 'your_secret_key'
@@ -28,8 +29,8 @@ def home():
 @app.route('/login', methods=['GET', 'POST'])
 def login():
     if request.method == "POST":
-        username = request.form['username']
-        password = request.form['password']
+        username = bleach.clean(request.form['username'])
+        password = bleach.clean(request.form['password'])
 
         conn = sqlite3.connect('users.db')
         c = conn.cursor()
@@ -66,9 +67,9 @@ def logout():
 @app.route('/register', methods=['GET', 'POST'])
 def register():
     if request.method == 'POST':
-        username = request.form['username']
-        password = request.form['password']
-        confirm_password = request.form['confirm_password']
+        username = bleach.clean(request.form['username'])
+        password = bleach.clean(request.form['password'])
+        confirm_password = bleach.clean(request.form['confirm_password'])
 
         if password != confirm_password:
             return render_template('registration.html', error='Şifreler uyuşmuyor')
