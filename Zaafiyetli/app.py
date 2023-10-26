@@ -79,8 +79,7 @@ def register():
         if existing_user:
             return render_template('registration.html', error='Bu kullanıcı adı zaten alınmış')
 
-        # Şifreyi hash'le ve kullanıcıyı eklemek için sorguyu çalıştır
-        hashed_password = hashlib.sha256(password.encode()).hexdigest()
+
         c.execute("INSERT INTO users (username, password) VALUES (?, ?)", (username, password))
 
         conn.commit()
